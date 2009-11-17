@@ -27,6 +27,7 @@ sub _save{
 	return sprintf q{saved %s}.q{at %s line %d}, $proc, $file, $line;
 }
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Scope::Value;
@@ -53,11 +54,14 @@ sub leave{
 	return;
 }
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Scope::Tmps;
 use Mouse;
 extends 'Acme::Perl::VM::Scope::Value';
+
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Scope::Comppad;
@@ -86,6 +90,7 @@ sub leave{
 	return;
 }
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Scope::Clearsv;
@@ -124,6 +129,7 @@ sub leave{
 	return;
 }
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Scope::Padsv;
@@ -164,6 +170,7 @@ sub leave{
 	return;
 }
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Scope::Localizer; # ABSTRACT
@@ -202,6 +209,7 @@ sub leave{
 	return;
 }
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Scope::Scalar;
@@ -231,6 +239,7 @@ sub sv{
 	return $self->gv->SV;
 }
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Scope::Scalar::Magical;
@@ -249,6 +258,7 @@ sub leave{
 	return;
 }
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Scope::Array;
@@ -269,6 +279,8 @@ sub sv{
 	my($self) = @_;
 	return $self->gv->AV;
 }
+
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Scope::Hash;
@@ -289,6 +301,8 @@ sub sv{
 	my($self) = @_;
 	return $self->gv->HV;
 }
+
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 

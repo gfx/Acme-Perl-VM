@@ -8,6 +8,7 @@ sub type{
 	return $type;
 }
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Context::BLOCK;
@@ -61,6 +62,7 @@ sub CURPAD_SV{
 }
 
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Context::SUB;
@@ -117,12 +119,14 @@ sub BUILD{
 	return;
 }
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Context::EVAL;
 use Mouse;
 extends 'Acme::Perl::VM::Context::BLOCK';
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Context::LOOP;
@@ -162,6 +166,7 @@ sub BUILD{
 
 sub ITERVAR(){ undef }
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Context::FOREACH;
@@ -245,30 +250,35 @@ sub ITERDATA_SET{
 	$cx->itersave($cx->ITERVAR);
 }
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Context::GivenWhen;
 use Mouse;
 extends 'Acme::Perl::VM::Context::BLOCK';
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Context::GIVEN;
 use Mouse;
 extends 'Acme::Perl::VM::Context::GivenWhen';
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Context::WHEN;
 use Mouse;
 extends 'Acme::Perl::VM::Context::GivenWhen';
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package Acme::Perl::VM::Context::SUBST;
 use Mouse;
 extends 'Acme::Perl::VM::Context';
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 __END__
