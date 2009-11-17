@@ -9,21 +9,21 @@ no warnings 'void';
 INIT{
     return if APVM_DUMMY;
 
-	if(is_not_null(main_start)){
-		ENTER;
-		SAVETMPS;
+    if(is_not_null(main_start)){
+        ENTER;
+        SAVETMPS;
 
-		$PL_curcop ||= bless \do{ my $addr = 0 }, 'B::COP'; # dummy cop
+        $PL_curcop ||= bless \do{ my $addr = 0 }, 'B::COP'; # dummy cop
 
-		$PL_op = main_start;
-		PAD_SET_CUR(comppadlist, 1);
+        $PL_op = main_start;
+        PAD_SET_CUR(comppadlist, 1);
 
-		$PL_runops->();
+        $PL_runops->();
 
-		FREETMPS;
-		LEAVE;
-	}
-	exit;
+        FREETMPS;
+        LEAVE;
+    }
+    exit;
 }
 
 1;
@@ -35,10 +35,10 @@ Acme::Perl::VM::Run - Runs a Perl script in APVM
 
 =head1 SYNOPSIS
 
-	#!perl -w
-	use Acme::Perl::VM::Run;
+    #!perl -w
+    use Acme::Perl::VM::Run;
 
-	print "Hello, world!\n";
+    print "Hello, world!\n";
 
 =head1 SEE ALSO
 

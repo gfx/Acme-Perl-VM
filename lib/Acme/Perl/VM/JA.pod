@@ -7,11 +7,11 @@ Acme::Perl::VM::JA - Pure PerlによるPerl5仮想マシンの実装(AVPM)
 
 =head1 SYNOPSIS
 
-	use Acme::Perl::VM;
+    use Acme::Perl::VM;
 
-	run_block{
-		print "Hello, APVM world!\n";
-	};
+    run_block{
+        print "Hello, APVM world!\n";
+    };
 
 
 =head1 DESCRIPTION
@@ -33,34 +33,34 @@ opcodeオブジェクトは他のopcodeオブジェクトへのリンクを持�
 
 ここでは以下のPerlコードを例にとり，プログラムの実行を追っていきます：
 
-	print(10 + 20);
+    print(10 + 20);
 
 まず，このコードをコンパイルすると，以下のような構文木が生成されます：
 
-	nextstate     # ステートメントの始まり
-	print         # 引数リストを印字
-	  pushmark    # 可変長引数のためのマーク
-	  add         # 加算演算
-	    const(10) # 定数[10]
-	    const(20) # 定数[20]
+    nextstate     # ステートメントの始まり
+    print         # 引数リストを印字
+      pushmark    # 可変長引数のためのマーク
+      add         # 加算演算
+        const(10) # 定数[10]
+        const(20) # 定数[20]
 
 構文木は子ノードから実行されるので，この構文木を解釈すると以下の順になります。
 
-	nextstate
-	pushmark
-	const(10)
-	const(20)
-	add
-	print
+    nextstate
+    pushmark
+    const(10)
+    const(20)
+    add
+    print
 
 それぞれのopcodeは必要に応じてスタックから引数をポップし，戻り値をプッシュします。opcodeの実行とスタックの中身を同時に表すと以下のようになります。
 
-	nextstate ()
-	pushmark  ()       # mark = -1 (MARKについては後のセクションで解説)
-	const(10) (10)     # スタックに値をPUSH
-	const(20) (10, 20) # スタックに値をPUSH
-	add       (30)     # 値を2つPOPし，演算結果をPUSH
-	print     (1)      # mark+1からTOPまでを印字し，結果(真)をPUSH
+    nextstate ()
+    pushmark  ()       # mark = -1 (MARKについては後のセクションで解説)
+    const(10) (10)     # スタックに値をPUSH
+    const(20) (10, 20) # スタックに値をPUSH
+    add       (30)     # 値を2つPOPし，演算結果をPUSH
+    print     (1)      # mark+1からTOPまでを印字し，結果(真)をPUSH
 
 これが構文木を解釈する基本的な流れです。プログラムの分岐やサブルーチンの呼び出しなどがあると更に複雑になりますが，一連の流れは同じです。
 
@@ -77,18 +77,18 @@ APVMではこれはPerlの配列で表現され，スタックポインタは配
 ローカルコピーは作りません。
 
 AVPMとの対応：
-	perl            APVM
+    perl            APVM
 
-	PL_stack_base   @PL_stack
-	PL_stack_sp     $#PL_stack
-	dSP             (nothing)
-	SP              $#PL_stack
-	TOPs            TOP
-	PUSHs(sv)       PUSH($sv)
-	POPs            POP
-	SPAGAIN         (nothing)
-	PUTBACK         (nothing)
-	EXTEND(SP, n)   (nothing)
+    PL_stack_base   @PL_stack
+    PL_stack_sp     $#PL_stack
+    dSP             (nothing)
+    SP              $#PL_stack
+    TOPs            TOP
+    PUSHs(sv)       PUSH($sv)
+    POPs            POP
+    SPAGAIN         (nothing)
+    PUTBACK         (nothing)
+    EXTEND(SP, n)   (nothing)
 
 See also F<pp.h>.
 
@@ -102,17 +102,17 @@ See also F<pp.h>.
 また，C<dMARK>マクロによりスタックから値をポップし，C<MARK>マクロを使えるようにします。
 
 APVMとの対応：
-	perl            APVM
+    perl            APVM
 
-	PUSHMARK(SP)    PUSHMARK($#PL_stack)
-	TOPMARK         TOPMARK
-	POPMARK         POPMARK
-	dMARK           my $mark = POPMARK
-	MARK++          $mark++
-	*MARK           $PL_stack[$mark]
+    PUSHMARK(SP)    PUSHMARK($#PL_stack)
+    TOPMARK         TOPMARK
+    POPMARK         POPMARK
+    dMARK           my $mark = POPMARK
+    MARK++          $mark++
+    *MARK           $PL_stack[$mark]
 
-	dORIGMARK       my $origmark = $mark
-	SP = ORIGMARK   $#PL_stack = $origmark
+    dORIGMARK       my $origmark = $mark
+    SP = ORIGMARK   $#PL_stack = $origmark
 
 See also F<pp.h>.
 
@@ -196,16 +196,16 @@ See also F<pp.c>, F<pp_hot.c>, F<pp_ctl.c>, F<pp_sys.c>, F<pp_sort.c> and F<pp_p
 デフォルトでは，F<run.c>にあるC<Perl_runops_standard()>が用いられます。
 これは，perl 5.8.8では以下のようになっています：
 
-	int
-	Perl_runops_standard(pTHX)
-	{
-	  while ((PL_op = CALL_FPTR(PL_op->op_ppaddr)(aTHX))) {
-	    PERL_ASYNC_CHECK();
-	  }
+    int
+    Perl_runops_standard(pTHX)
+    {
+      while ((PL_op = CALL_FPTR(PL_op->op_ppaddr)(aTHX))) {
+        PERL_ASYNC_CHECK();
+      }
 
-	  TAINT_NOT;
-	  return 0;
-	}
+      TAINT_NOT;
+      return 0;
+    }
 
 C<PL_op>は現在実行中のopcodeオブジェクトが入っているスレッドグローバルな変数です。C<op_ppaddr>はopcodeに対応したppcodeが入っており，ppcodeは次に実行するopcodeを返すことになっています。
 
