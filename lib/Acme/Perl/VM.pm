@@ -1120,7 +1120,7 @@ __END__
 
 =head1 NAME
 
-Acme::Perl::VM - An implementation of Perl5 Virtual Machine in Pure Perl (APVM)
+Acme::Perl::VM - A Perl5 Virtual Machine in Pure Perl (APVM)
 
 =head1 VERSION
 
@@ -1136,7 +1136,51 @@ This document describes Acme::Perl::VM version 0.005.
 
 =head1 DESCRIPTION
 
-C<Acme::Perl::VM> is a Perl5 Virtual Machine implemented in Pure Perl.
+C<Acme::Perl::VM> is an implementation of Perl5 virtual machine in pure Perl.
+
+Perl provides a feature to access compiled syntax trees (B<opcodes>) by
+C<B> module. C<B::*> modules walk into opcodes and do various things;
+C<B::Deparse> retrieves Perl source code from subroutine references,
+C<B::Concise> reports formatted syntax trees, and so on.
+
+This module also walks into the opcodes, and executes them with its
+own B<ppcodes>.
+
+You can run any Perl code:
+
+    use Acme::Perl::VM;
+
+    run_block {
+        print "Hello, APVM world!\n";
+    };
+
+This code says B<Hello, APVM world> to C<stdout> as you expect.
+
+Here is a more interesting example:
+
+    BEGIN{ $ENV{APVM} = 'trace' }
+    use Acme::Perl::VM;
+
+    run_block {
+        print "Hello, APVM world!\n";
+    };
+
+And you'll get a list of opcodes as the code runs:
+
+    .entersub(&__ANON__) VOID
+    .nextstate(main -:4) VOID
+    .pushmark SCALAR
+    .const("Hello, APVM world!\n") SCALAR
+    .print SCALAR KIDS
+    Hello, APVM world!
+    .leavesub KIDS
+
+The first C<entersub> is the start of the block. The next C<nextstate>
+indicates the statement that says hello. C<pushmark>, C<const>, and
+C<print> are opcodes which runs on the statement. The last C<leavesub> is
+the end of the block. This is a future of the module.
+
+In short, the module has no purpose :)
 
 =head1 DEPENDENCIES
 
@@ -1171,6 +1215,8 @@ F<scope.h> and F<scope.c> for scope stacks.
 F<pad.h> and F<pad.c> for pad variables.
 
 F<run.c> for runops.
+
+L<B>.
 
 L<B::Concise>.
 

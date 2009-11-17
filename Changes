@@ -1,5 +1,9 @@
 Revision history for Perl extension Acme::Perl::VM
 
+0.006
+    - Work on Perl 5.11
+    - Add a description
+
 0.0.5 Tue May 26 23:28:48 2009
     - mention Devel::Optrace
     - add pp_andassign/pp_orassign
