@@ -4,7 +4,7 @@ use 5.008_001;
 use strict;
 use warnings;
 
-our $VERSION = 0.006;
+our $VERSION = '0.005';
 
 use constant APVM_DEBUG  => ( $ENV{APVM_DEBUG} || 0 );
 use constant {
@@ -1125,7 +1125,7 @@ Acme::Perl::VM - An implementation of Perl5 Virtual Machine in Pure Perl (APVM)
 
 =head1 VERSION
 
-This document describes Acme::Perl::VM version 0.0.5.
+This document describes Acme::Perl::VM version 0.005.
 
 =head1 SYNOPSIS
 
