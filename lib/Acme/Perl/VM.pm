@@ -27,7 +27,7 @@ BEGIN{
 		$PL_comppad $PL_comppad_name @PL_curpad
 		$PL_last_in_gv
 		$PL_runops
-		%PL_ppaddr
+		@PL_ppaddr
 
 		PUSHMARK POPMARK TOPMARK
 		PUSH POP TOP SET SETval
@@ -105,6 +105,10 @@ use Acme::Perl::VM::Scope;
 use Acme::Perl::VM::PP;
 use Acme::Perl::VM::B;
 
+our $PL_runops = (APVM_TRACE || APVM_STACK)
+    ? \&runops_debug
+    : \&runops_standard;
+
 our $PL_op;
 our $PL_curcop;
 
@@ -123,26 +127,27 @@ our @PL_curpad;
 
 our $PL_last_in_gv;
 
-our $PL_runops = \&runops_standard;
-our %PL_ppaddr;
-{
-	while(my($name, $value) = each %Acme::Perl::VM::PP::){
-		if($name =~ s/^pp_//){
-			$PL_ppaddr{$name} = *{$value}{CODE};
-		}
-	}
-}
+our @PL_ppaddr;
 
-if(APVM_TRACE || APVM_STACK){
-	$PL_runops = \&runops_debug;
-}
-
-our $color = 'GREEN BOLD';
+our $color = 'GREEN BOLD'; # for debugging log
 
 sub not_implemented;
 
+{
+    my $i = 0;
+    while(my $ppname = B::ppname($i)){
+        my $ppaddr = \$Acme::Perl::VM::PP::{$ppname};
+
+        if(ref($ppaddr) eq 'GLOB'){
+            $PL_ppaddr[$i] = *{$ppaddr}{CODE} || sub{ not_implemented($ppname) };
+        }
+
+        $i++;
+    }
+}
+
 sub runops_standard{ # run.c
-	1 while(${ $PL_op = &{$PL_ppaddr{ $PL_op->name } || not_implemented($PL_op->ppaddr)} });
+	1 while(${ $PL_op = &{$PL_ppaddr[ $PL_op->type ]} });
 	return;
 }
 
@@ -223,7 +228,7 @@ sub _op_trace{
 
 sub runops_debug{
 	_op_trace();
-	while(${ $PL_op = &{$PL_ppaddr{ $PL_op->name } || not_implemented($PL_op->ppaddr)} }){
+	while(${ $PL_op = &{$PL_ppaddr[$PL_op->type]} }){
 		if(APVM_STACK){
 			dump_stack();
 		}
@@ -1076,18 +1081,22 @@ has flags => (
 	required => 1,
 );
 
-sub class(){ 'OP' }
-sub name(){ 'entersub' }
-sub desc(){ 'subroutine entry' }
+use constant {
+    class => 'OP',
+    type  => B::opnumber('entersub'),
+    name  => 'entersub',
+    desc  => 'subroutine entry',
 
-sub file(){ __FILE__ }
-sub line(){ 0 }
+    file  => __FILE__,
+    line  => 0,
+};
 
 sub isa{
 	shift;
 	return B::COP->isa(@_);
 }
 
+no Mouse;
 __PACKAGE__->meta->make_immutable();
 
 package
