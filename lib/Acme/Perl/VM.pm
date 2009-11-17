@@ -85,8 +85,6 @@ BEGIN{
         perl_h => \@EXPORT_OK,
     );
 
-    
-
     if(APVM_DEBUG && -t *STDERR){
         require Term::ANSIColor;
 
@@ -622,15 +620,15 @@ sub OP_GIMME{ # op.h
 
 sub OP_GIMME_REVERSE{ # op.h
     my($flags) = @_;
-
-    return $flags & G_VOID  ? OPf_WANT_VOID
-        :  $flags & G_ARRAY ? OPf_WANT_LIST
-        :                     OPf_WANT_SCALAR;
+    $flags &= G_WANT;
+    return $flags == G_VOID   ? OPf_WANT_VOID
+        :  $flags == G_SCALAR ? OPf_WANT_SCALAR
+        :                       OPf_WANT_LIST;
 }
 
 sub gimme2want{
     my($gimme) = @_;
-
+    $gimme &= G_WANT;
     return $gimme == G_VOID   ? undef
         :  $gimme == G_SCALAR ? 0
         :                       1;
@@ -642,6 +640,7 @@ sub want2gimme{
         :          !$wantarray  ? G_SCALAR
         :                         G_ARRAY;
 }
+
 sub block_gimme{
     my $cxix = dopoptosub($#PL_cxstack);
 
