@@ -6,7 +6,7 @@ use warnings;
 
 our $VERSION = '0.005';
 
-use constant APVM_DEBUG  => ( $ENV{APVM_DEBUG} || 0 );
+use constant APVM_DEBUG  => ( $ENV{APVM} || $ENV{APVM_DEBUG} || 0 );
 use constant {
     APVM_TRACE => scalar(APVM_DEBUG =~ /\b trace \b/xmsi),
     APVM_SCOPE => scalar(APVM_DEBUG =~ /\b scope \b/xmsi),
