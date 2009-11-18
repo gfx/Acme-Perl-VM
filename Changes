@@ -1,6 +1,6 @@
 Revision history for Perl extension Acme::Perl::VM
 
-0.006
+0.006 Wed Nov 18 10:35:46 2009
     - Work on Perl 5.11
     - Add descriptions
 
