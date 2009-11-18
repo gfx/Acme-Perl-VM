@@ -838,34 +838,33 @@ sub mark_list{
     return map{ ${ $_->object_2svref } } splice @PL_stack, $mark+1;
 }
 
-{
-    our %external;
 
-    sub apvm_extern{
-        foreach my $arg(@_){
-            if(ref $arg){
-                if(ref($arg) ne 'CODE'){
-                    Carp::croak('Not a CODE reference for apvm_extern()');
-                }
-                $external{refaddr $arg} = 1;
+our %external;
+
+sub apvm_extern{
+    foreach my $arg(@_){
+        if(ref $arg){
+            if(ref($arg) ne 'CODE'){
+                Carp::croak('Not a CODE reference for apvm_extern()');
             }
-            else{
-                my $stash = do{ no strict 'refs'; \%{$arg .'::'} };
-                while(my $name = each %{$stash}){
-                    my $code_ref = do{ no strict 'refs'; *{$arg . '::' . $name}{CODE} };
-                    if(defined $code_ref){
-                        $external{refaddr $code_ref} = 1;
-                    }
+            $external{refaddr $arg} = 1;
+        }
+        else{
+            my $stash = do{ no strict 'refs'; \%{$arg .'::'} };
+            while(my $name = each %{$stash}){
+                my $code_ref = do{ no strict 'refs'; *{$arg . '::' . $name}{CODE} };
+                if(defined $code_ref){
+                    $external{refaddr $code_ref} = 1;
                 }
             }
         }
-        return;
     }
+    return;
+}
 
-    sub cv_external{
-        my($cv) = @_;
-        return $cv->XSUB || $external{ ${$cv} };
-    }
+sub cv_external{
+    my($cv) = @_;
+    return $cv->XSUB || $external{ ${$cv} };
 }
 
 sub ddx{
