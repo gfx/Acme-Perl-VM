@@ -14,6 +14,14 @@ unless(defined &OPpPAD_STATE){
     constant->import(OPpPAD_STATE => 0x00);
     push @EXPORT, qw(OPpPAD_STATE);
 }
+unless(defined &G_WANT){
+    constant->import(G_WANT => G_SCALAR() | G_ARRAY() | G_VOID());
+    push @EXPORT, qw(G_WANT);
+}
+unless(defined &OPpITER_REVERSED){
+    constant->import(OPpITER_REVERSED => 0x00);
+    push @EXPORT, qw(OPpITER_REVERSED);
+}
 
 push @EXPORT, qw(NULL TRUE FALSE USE_ITHREADS sv_yes sv_no);
 use constant {
@@ -25,6 +33,7 @@ use constant {
     sv_yes       => B::sv_yes,
     sv_no        => B::sv_no,
 };
+
 
 package
     B::OBJECT;

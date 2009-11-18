@@ -240,7 +240,7 @@ The Context and Block Stack (PL_cxstack)
 
 =item *
 
-The Stack Infomation (PL_curstackinfo)
+The Stack Information (PL_curstackinfo)
 
 =back
 

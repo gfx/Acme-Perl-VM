@@ -16,3 +16,8 @@ __DATA__
 Goro Fuji (gfx)
 gfuji(at)cpan.org
 Acme::Perl::VM
+APVM
+gfx
+ppcode
+ppcodes
+runops
