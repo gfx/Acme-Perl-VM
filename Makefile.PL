@@ -16,6 +16,8 @@ test_requires 'Test::More' => 0.62;
 tests 't/*.t';
 author_tests 'xt';
 
+auto_set_repository;
+
 clean_files q(
     Acme-Perl-VM-* *.stackdump
     cover_db
