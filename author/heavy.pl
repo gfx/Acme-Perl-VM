@@ -9,10 +9,10 @@ chomp $file;
 open my $in, '<', $file;
 
 run_block{
-	local $|= 1;
-	my $i = 0;
-	while(<$in>){
-		print $i++, "\r";
-	}
-	say $i;
+    local $|= 1;
+    my $i = 0;
+    while(<$in>){
+        print $i++, "\r";
+    }
+    say $i;
 };

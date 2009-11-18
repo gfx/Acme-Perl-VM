@@ -8,14 +8,14 @@ $| = 0;
 my $mgref = \$|;
 my $r;
 {
-	local $| = 1;
-	$r = \$|;
-	Dump($mgref);
-	Dump($r);
+    local $| = 1;
+    $r = \$|;
+    Dump($mgref);
+    Dump($r);
 
 
-	print "$$mgref\n";
-	print "$$r\n";
+    print "$$mgref\n";
+    print "$$r\n";
 }
 
 Dump($mgref);

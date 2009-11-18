@@ -7,7 +7,7 @@ use Acme::Perl::VM;
 
 open *SELF, '<', $0;
 run_block{
-	while(<SELF>){
-		print;
-	}
+    while(<SELF>){
+        print;
+    }
 };

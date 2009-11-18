@@ -9,23 +9,23 @@ use Acme::Perl::VM qw(:perl_h);
 apvm_extern 'Test::More';
 
 run_block{
-	my $a = 0;
+    my $a = 0;
 
-	$a ||= 10;
+    $a ||= 10;
 
-	is $a, 10;
+    is $a, 10;
 
-	$a ||= 100;
+    $a ||= 100;
 
-	is $a, 10;
+    is $a, 10;
 
-	$a &&= 0;
+    $a &&= 0;
 
-	is $a, 0;
+    is $a, 0;
 
-	$a &&= 100;
+    $a &&= 100;
 
-	is $a, 0;
+    is $a, 0;
 };
 
 

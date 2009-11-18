@@ -15,12 +15,12 @@ is_deeply run_block{ +{foo => 1} }, {foo => 1};
 is_deeply run_block{ +{foo => 1, bar => 2, foo => 3} }, {foo => 3, bar => 2};
 
 sub f{
-	return [1, 2, 3];
+    return [1, 2, 3];
 }
 is_deeply run_block{ f() }, [1, 2, 3];
 
 sub g{
-	return { foo => 'bar' };
+    return { foo => 'bar' };
 }
 is_deeply run_block{ g() }, {foo => 'bar'};
 

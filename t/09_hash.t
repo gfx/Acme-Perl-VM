@@ -7,73 +7,73 @@ use Acme::Perl::VM;
 use Acme::Perl::VM qw(:perl_h);
 
 sub Dump{
-	require Data::Dumper;
-	diag(Data::Dumper::Dumper(@_));
+    require Data::Dumper;
+    diag(Data::Dumper::Dumper(@_));
 }
 
 my $x = run_block{
-	my %h;
+    my %h;
 };
 ok !$x;
 
 $x = run_block{
-	my %h = (key => 10);
+    my %h = (key => 10);
 };
 ok $x;
 
 my %hash = run_block{
-	my %h = (foo => 10, bar => 20);
+    my %h = (foo => 10, bar => 20);
 };
 is_deeply(\%hash, { foo => 10, bar => 20 }) or Dump(\%hash);
 
 %hash = run_block{
-	our %h = (foo => 10, bar => 20);
+    our %h = (foo => 10, bar => 20);
 };
 is_deeply(\%hash, { foo => 10, bar => 20 }) or Dump(\%hash);
 
 %hash = run_block{
-	my %h = (foo => 10, foo => 20, bar => 30);
+    my %h = (foo => 10, foo => 20, bar => 30);
 };
 is_deeply \%hash, { foo => 20, bar => 30 } or Dump($x);
 
 %hash = run_block{
-	my %h = (a => 1, foo => 10, b => 2, foo => 20, c => 3);
+    my %h = (a => 1, foo => 10, b => 2, foo => 20, c => 3);
 };
 is_deeply \%hash, { a => 1, foo => 10, b => 2, foo => 20, c => 3 };
 
 $x = run_block{
-	my %h = (foo => 10, bar => 20);
-	return \%h;
+    my %h = (foo => 10, bar => 20);
+    return \%h;
 };
 is_deeply $x, { foo => 10, bar => 20 } or Dump($x);
 
 $x = run_block{
-	my %h = (foo => 10, bar => 20);
-	$h{foo} = $h{bar} + 1;
-	return \%h;
+    my %h = (foo => 10, bar => 20);
+    $h{foo} = $h{bar} + 1;
+    return \%h;
 };
 is_deeply $x, { foo => 21, bar => 20 } or Dump($x);
 
 $x = run_block{
-	my %h = (foo => 10, bar => 20);
-	return $h{foo};
+    my %h = (foo => 10, bar => 20);
+    return $h{foo};
 };
 is_deeply $x, 10;
 
 $x = run_block{
-	our %h = (foo => 10, bar => 20);
-	return $h{foo};
+    our %h = (foo => 10, bar => 20);
+    return $h{foo};
 };
 is_deeply $x, 10;
 $x = run_block{
-	our %h = (foo => 10, bar => 20);
-	return \$h{foo};
+    our %h = (foo => 10, bar => 20);
+    return \$h{foo};
 };
 is_deeply $x, \10;
 
 sub f{
-	my %h;
-	return \$h{foo};
+    my %h;
+    return \$h{foo};
 }
 $x = run_block(\&f);
 is_deeply $x, \undef;

@@ -9,12 +9,12 @@ use Acme::Perl::VM qw(:perl_h);
 apvm_extern 'Test::More';
 
 run_block{
-	my @a = (1, 2, 3);
+    my @a = (1, 2, 3);
 
-	is join(' ', @a), '1 2 3';
-	is join('/', 1 .. 3), '1/2/3';
-	is  "@a",   '1 2 3';
-	is "[@a]", '[1 2 3]';
+    is join(' ', @a), '1 2 3';
+    is join('/', 1 .. 3), '1/2/3';
+    is  "@a",   '1 2 3';
+    is "[@a]", '[1 2 3]';
 };
 
 

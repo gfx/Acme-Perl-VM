@@ -7,12 +7,12 @@ use lib "$Bin/../lib";
 use Acme::Perl::VM::Run;
 
 sub Foo::hello{
-	my(undef, $msg) = @_;
+    my(undef, $msg) = @_;
 
-	print "Hello, $msg world!\n";
+    print "Hello, $msg world!\n";
 }
 
 for(my $i = 1; $i <= 1; $i++){
-	Foo->hello('APVM');
+    Foo->hello('APVM');
 }
 

@@ -9,18 +9,18 @@ use Acme::Perl::VM qw(:perl_h);
 apvm_extern \&ok, \&is;
 
 run_block{
-	ok 1, 'call an external subroutine';
+    ok 1, 'call an external subroutine';
 
-	is 42, 42;
+    is 42, 42;
 };
 
 apvm_extern 'Test::More';
 
 run_block{
-	like 'foobar', qr/foo/;
+    like 'foobar', qr/foo/;
 
-	my @a = (1 .. 3);
-	is_deeply \@a, [1, 2, 3];
+    my @a = (1 .. 3);
+    is_deeply \@a, [1, 2, 3];
 };
 
 

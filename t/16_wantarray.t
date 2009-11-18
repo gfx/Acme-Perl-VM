@@ -8,7 +8,7 @@ use Acme::Perl::VM qw(:perl_h);
 
 my $x;
 sub f{
-	$x = wantarray;
+    $x = wantarray;
 }
 
 run_block \&f;

@@ -8,18 +8,18 @@ use Acme::Perl::VM qw(:perl_h);
 
 sub Foo::f{ 42 }
 sub Foo::g{
-	my(undef, $value) = @_;
-	$value++;
-	return $value;
+    my(undef, $value) = @_;
+    $value++;
+    return $value;
 }
 sub Foo::h{
-	@_
+    @_
 }
 
 my $x;
 
 $x = run_block{
-	Foo->f();
+    Foo->f();
 };
 is $x, 42;
 
@@ -30,22 +30,22 @@ $x = [run_block{ Foo->f(); Foo->f() }];
 is_deeply $x, [42];
 
 $x = run_block{
-	Foo->g(42);
+    Foo->g(42);
 };
 is $x, 43;
 
 $x = run_block{
-	Foo->g(10);
+    Foo->g(10);
 };
 is $x, 11;
 
 $x = run_block{
-	Foo->g(1, 10, 100);
+    Foo->g(1, 10, 100);
 };
 is $x, 2;
 
 for my $i(1 .. 3){
-	is_deeply [run_block{ Foo->g($i) }], [$i+1], "($i)";
+    is_deeply [run_block{ Foo->g($i) }], [$i+1], "($i)";
 }
 
 is_deeply [run_block{        Foo->h(10, 20, 30) }], ['Foo', 10, 20, 30];
