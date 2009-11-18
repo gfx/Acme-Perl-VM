@@ -137,8 +137,10 @@ sub not_implemented;
         my $ppaddr = \$Acme::Perl::VM::PP::{$ppname};
 
         if(ref($ppaddr) eq 'GLOB'){
-            $PL_ppaddr[$i] = *{$ppaddr}{CODE} || sub{ not_implemented($ppname) };
+            $PL_ppaddr[$i] = *{$ppaddr}{CODE};
         }
+
+        $PL_ppaddr[$i] ||= sub{ not_implemented($ppname) };
 
         $i++;
     }
