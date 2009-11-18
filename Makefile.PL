@@ -16,11 +16,12 @@ test_requires 'Test::More' => 0.62;
 tests 't/*.t';
 author_tests 'xt';
 
-WriteMakefile(
-	clean => {FILES => q(
-		Acme-Perl-VM-* *.stackdump
-		cover_db
-		nytprof
-		*.out
-	)},
+clean_files q(
+    Acme-Perl-VM-* *.stackdump
+    cover_db
+    nytprof
+    *.out
 );
+
+WriteAll check_nmake => 0;
+
