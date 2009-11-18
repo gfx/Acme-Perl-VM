@@ -5,9 +5,11 @@ use inc::Module::Install;
 name 'Acme-Perl-VM';
 all_from 'lib/Acme/Perl/VM.pm';
 
+requires 'B';
 requires 'Exporter' => 5.57;
 requires 'Mouse'    => 0.21;
-requires 'B';
+
+requires 'MRO::Compat' => 0.09 if $] < 5.010;
 
 test_requires 'Test::More' => 0.62;
 
